@@ -13,7 +13,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 
-Route::post('/multi-auth', function (Request $request) {
+Route::get('/multi-auth', function (Request $request) {
     $request->validate([
         'name' => 'required|string|max:255',
         'email' => 'required|string|email|max:255',
@@ -30,7 +30,7 @@ Route::post('/multi-auth', function (Request $request) {
     }
 
     Auth::login($user);
-    return redirect('https://commerce.scidata-analyst.com');
+    return view('shop.index');
 })->name('multi-auth');
 
 Route::group(['middleware' => ['auth', 'verified']], function () {
