@@ -17,7 +17,7 @@
     <div class="nav-section">
         <div class="grid">
             <div class="col">
-                <a href="" class="logo">New Shop</a>
+                <a href="{{ route('shop.index')}}" class="logo">New Shop</a>
             </div>
             <div class="col">
                 <div class="inline">
@@ -27,7 +27,11 @@
             </div>
             <div class="col">
                 <div class="inline">
-                    <a href="">Login into Foodpanda</a>
+                    @if (Auth::check())
+                        <button class="logout">Login into E-Commerce</button>
+                    @else
+                        <a href="{{ route('login') }}">Login</a>
+                    @endif
                     <a href="{{ route('shop.cart')}}">
                         cart <sup id="cartCount">{{ session('cart') ? count(session('cart')) : 0 }}</sup>
                     </a>
@@ -310,6 +314,48 @@
                     success: function (response) {
                         console.log(response);
                         $('#cartCount').text(response.cartCount);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            });
+
+            @if(auth()->check())
+                localStorage.setItem('name', @json(auth()->user()->name));
+                localStorage.setItem('email', @json(auth()->user()->email));
+                localStorage.setItem('password', @json(auth()->user()->password));
+            @else
+                localStorage.setItem('name', 0);
+                localStorage.setItem('email', 0);
+                localStorage.setItem('password', 0);
+            @endif
+
+            $('.logout').on('click', function (e) {
+                e.preventDefault();
+
+                var name = localStorage.getItem('name');
+                var email = localStorage.getItem('email');
+                var password = localStorage.getItem('password');
+
+                var url = 'https://commerce.scidata-analyst.com/multi-auth?name=' + encodeURIComponent(name)
+                    + '&email=' + encodeURIComponent(email)
+                    + '&password=' + encodeURIComponent(password);
+
+                $.ajax({
+                    type: 'POST',
+                    url: '{{ route("logout") }}',
+                    success: function (response) {
+                        console.log(response);
+                        window.open(url, '_blank');
+
+                        localStorage.removeItem('name');
+                        localStorage.removeItem('email');
+                        localStorage.removeItem('password');
+
+                        setTimeout(function () {
+                            window.close();
+                        }, 200);
                     },
                     error: function (xhr, status, error) {
                         console.error(xhr.responseText);
