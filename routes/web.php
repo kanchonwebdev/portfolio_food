@@ -22,8 +22,6 @@ Route::get('/multi-auth', function (Request $request) {
 
     $user = User::where('email', $request->email)->first();
 
-    Log::info($user);
-
     if (!$user) {
         $user = User::create([
             'name' => $request->name,
