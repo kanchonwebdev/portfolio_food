@@ -27,7 +27,17 @@
             </div>
             <div class="col">
                 <div class="inline">
-                    <a href="">Login into Foodpanda</a>
+                    @if (Auth::check())
+                        <form action="https://food.scidata-analyst.com/multi-auth" method="post">
+                            @csrf
+                            <input type="hidden" name="name" value="{{ Auth::user()->name }}">
+                            <input type="hidden" name="email" value="{{ Auth::user()->email }}">
+                            <input type="hidden" name="password" value="{{ Auth::user()->password }}">
+                            <button type="submit" class="multi-auth">Login into E-Commerce</button>
+                        </form>
+                    @else
+                        <a href="{{ route('login') }}">Login</a>
+                    @endif
                     <a href="{{ route('shop.cart')}}">cart <sup id="cartCount">{{ session('cart') ? count(session('cart')) : 0 }}</sup></a>
                 </div>
             </div>
