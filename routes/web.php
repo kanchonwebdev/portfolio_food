@@ -11,8 +11,6 @@ use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-
 
 Route::get('/multi-auth', function (Request $request) {
     $request->validate([
@@ -33,6 +31,7 @@ Route::get('/multi-auth', function (Request $request) {
     Auth::login($user);
     return redirect('/');
 })->name('multi-auth');
+
 
 Route::group(['middleware' => ['auth', 'verified']], function () {
 
@@ -85,12 +84,10 @@ Route::get('product/cart', [ProductController::class, 'cart'])->name('shop.cart'
 /* checkout controller */
 Route::post('checkout/store', [CheckoutController::class, 'store'])->name('checkout.store');
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [ProductController::class, 'index'])->name('shop.index');
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    return view('admin.welcome');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('product/checkout', [ProductController::class, 'checkout'])->middleware(['auth', 'verified'])->name('shop.checkout');
