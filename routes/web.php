@@ -30,7 +30,7 @@ Route::get('/multi-auth', function (Request $request) {
     }
 
     Auth::login($user);
-    return view('shop.index');
+    return redirect('shop.index');
 })->name('multi-auth');
 
 Route::group(['middleware' => ['auth', 'verified']], function () {
