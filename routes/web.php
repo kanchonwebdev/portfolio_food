@@ -11,6 +11,7 @@ use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 
 Route::get('/multi-auth', function (Request $request) {
@@ -20,6 +21,8 @@ Route::get('/multi-auth', function (Request $request) {
     ]);
 
     $user = User::where('email', $request->email)->first();
+
+    Log::info($user);
 
     if (!$user) {
         $user = User::create([
